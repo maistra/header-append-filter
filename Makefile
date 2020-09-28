@@ -15,3 +15,6 @@ container: clean build
 	cp container/manifest.yaml build/
 	cp extension.wasm build/
 	cd build && docker build -t ${HUB}/header-append-filter . -f ../container/Dockerfile
+
+container.push: container
+	docker push ${HUB}/header-append-filter
