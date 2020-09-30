@@ -1,3 +1,5 @@
+HUB ?= quay.io/maistra-dev
+
 build: oidc.wasm
 
 oidc.wasm:
