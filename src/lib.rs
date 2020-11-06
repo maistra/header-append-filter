@@ -40,10 +40,8 @@ impl RootContext for HeaderAppendRootContext {
     }
 
     fn on_configure(&mut self, _plugin_configuration_size: usize) -> bool {
-        if self.header_content == "" {
-            if let Some(config_bytes) = self.get_configuration() {
-                self.header_content = str::from_utf8(config_bytes.as_ref()).unwrap().to_owned()
-            }
+        if let Some(config_bytes) = self.get_configuration() {
+            self.header_content = str::from_utf8(config_bytes.as_ref()).unwrap().to_owned()
         }
         true
     }
