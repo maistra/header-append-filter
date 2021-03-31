@@ -1,13 +1,11 @@
 [package]
 name = "header-append-filter"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Daniel Grimm <dgrimm@redhat.com>"]
 edition = "2018"
 
 [dependencies]
-# Gotta use my fork because config reading is broken upstream
-proxy-wasm = { git = "https://github.com/dgn/proxy-wasm-rust-sdk" }
-# proxy-wasm = "0.1.2"
+proxy-wasm = "0.1.3"
 
 [lib]
 crate-type = ["cdylib"]

@@ -46,15 +46,15 @@ impl RootContext for HeaderAppendRootContext {
         true
     }
 
-    fn create_http_context(&self, _context_id: u32, _root_context_id: u32) -> Box<dyn HttpContext> {
-        Box::new(HeaderAppendFilter{
+    fn create_http_context(&self, _context_id: u32) -> Option<Box<dyn HttpContext>> {
+        Some(Box::new(HeaderAppendFilter{
             header_content: self.header_content.clone(),
-        })
+        }))
     
     }
 
-    fn get_type(&self) -> ContextType {
-        ContextType::HttpContext
+    fn get_type(&self) -> Option<ContextType> {
+        Some(ContextType::HttpContext)
     }
 
 }
