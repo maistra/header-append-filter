@@ -1,3 +1,4 @@
+VERSION = 2.0
 HUB ?= quay.io/maistra-dev
 
 build: oidc.wasm
@@ -16,7 +17,7 @@ container: clean build
 	mkdir build
 	cp container/manifest.yaml build/
 	cp extension.wasm build/
-	cd build && docker build -t ${HUB}/header-append-filter . -f ../container/Dockerfile
+	cd build && docker build -t ${HUB}/header-append-filter:${VERSION} . -f ../container/Dockerfile
 
 container.push: container
-	docker push ${HUB}/header-append-filter
+	docker push ${HUB}/header-append-filter:${VERSION}
