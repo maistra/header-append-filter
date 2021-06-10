@@ -1,19 +1,22 @@
 use proxy_wasm::traits::*;
 use proxy_wasm::types::*;
-use std::str;
+use serde_json::{Value};
+
+use std::collections::HashMap;
+
 
 #[no_mangle]
 pub fn _start() {
     proxy_wasm::set_log_level(LogLevel::Trace);
     proxy_wasm::set_root_context(|_| -> Box<dyn RootContext> {
         Box::new(HeaderAppendRootContext{
-            header_content: "".to_string(),
+            headers: HashMap::new()
         })
     });
 }
 
 struct HeaderAppendFilter{
-    header_content: String
+    headers: HashMap<String, String>
 }
 
 impl Context for HeaderAppendFilter {}
@@ -21,14 +24,16 @@ impl Context for HeaderAppendFilter {}
 impl HttpContext for HeaderAppendFilter {
 
     fn on_http_response_headers(&mut self, _num_headers: usize) -> Action {
-        self.add_http_response_header("custom-header", self.header_content.as_str());
-
+        for (key, value) in &self.headers {
+            self.add_http_response_header(key, value);
+        }
+        
         Action::Continue
     }
 }
 
 struct HeaderAppendRootContext {
-    header_content: String
+    headers: HashMap<String, String>
 }
 
 impl Context for HeaderAppendRootContext {}
@@ -41,14 +46,19 @@ impl RootContext for HeaderAppendRootContext {
 
     fn on_configure(&mut self, _plugin_configuration_size: usize) -> bool {
         if let Some(config_bytes) = self.get_configuration() {
-            self.header_content = str::from_utf8(config_bytes.as_ref()).unwrap().to_owned()
+            let config: Value = serde_json::from_slice(config_bytes.as_slice()).unwrap();
+            let mut m = HashMap::new();
+            for (key, value) in config.as_object().unwrap().iter() {
+                m.insert(key.to_owned(), value.to_string());
+            }
+            self.headers = m
         }
         true
     }
 
     fn create_http_context(&self, _context_id: u32) -> Option<Box<dyn HttpContext>> {
         Some(Box::new(HeaderAppendFilter{
-            header_content: self.header_content.clone(),
+            headers: self.headers.clone(),
         }))
     
     }
