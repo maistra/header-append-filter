@@ -29,4 +29,4 @@ lint:
 
 .PHONY: test
 test: build
-	./tests/run-envoy.sh
+	ISTIO_BRANCH=maistra-2.1 ./tests/run-envoy.sh

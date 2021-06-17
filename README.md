@@ -21,3 +21,4 @@ $ make build
 ```
 
 A file named `extension.wasm` was created in the current directory.
+
