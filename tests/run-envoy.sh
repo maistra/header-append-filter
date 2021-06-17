@@ -51,5 +51,5 @@ function main() {
   run_envoy
   run_test
 }
-
+echo $XUXA
 main
