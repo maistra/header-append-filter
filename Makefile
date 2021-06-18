@@ -21,3 +21,12 @@ container: clean build
 
 container.push: container
 	docker push ${HUB}/header-append-filter:${VERSION}
+
+.PHONY: lint
+# TODO: Add linter for rust code
+lint:
+	find . -name '*.sh' -print0 | xargs -0 -r shellcheck
+
+.PHONY: test
+test: build
+	./tests/run-envoy.sh

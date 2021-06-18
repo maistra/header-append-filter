@@ -49,7 +49,7 @@ impl RootContext for HeaderAppendRootContext {
             let config: Value = serde_json::from_slice(config_bytes.as_slice()).unwrap();
             let mut m = HashMap::new();
             for (key, value) in config.as_object().unwrap().iter() {
-                m.insert(key.to_owned(), value.to_string());
+                m.insert(key.to_owned(), String::from(value.as_str().unwrap()));
             }
             self.headers = m
         }
