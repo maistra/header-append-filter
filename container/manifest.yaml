@@ -5,4 +5,4 @@ description: Just appends a header based on config
 version: 1.0.0
 phase: PreAuthZ
 priority: 100
-module: extension.wasm
+module: plugin.wasm

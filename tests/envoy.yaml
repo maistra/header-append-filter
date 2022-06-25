@@ -47,7 +47,7 @@ static_resources:
                               }
                           code:
                             local:
-                              filename: "./extension.wasm"
+                              filename: "./plugin.wasm"
                   - name: envoy.filters.http.router
 
 admin:
