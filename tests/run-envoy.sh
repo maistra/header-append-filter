@@ -20,7 +20,7 @@ function download_envoy() {
 
 # run_envoy runs the envoy process in background
 function run_envoy() {
-  cp "${ROOTDIR}/extension.wasm" "${SCRIPTPATH}"
+  cp "${ROOTDIR}/plugin.wasm" "${SCRIPTPATH}"
   "${ENVOY_BINARY}" -c ./tests/envoy.yaml --concurrency 2 --log-format '%v' &
   ENVOY_PID=$!
   sleep 5

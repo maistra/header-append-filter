@@ -20,4 +20,4 @@ Build the extension:
 $ make build
 ```
 
-A file named `extension.wasm` was created in the current directory.
+A file named `plugin.wasm` was created in the current directory.

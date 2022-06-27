@@ -1,22 +1,22 @@
-VERSION = 2.1
+VERSION = 2.2
 HUB ?= quay.io/maistra-dev
 
 build: oidc.wasm
 
 oidc.wasm:
 	cargo build --target wasm32-unknown-unknown --release
-	cp target/wasm32-unknown-unknown/release/header_append_filter.wasm ./extension.wasm
+	cp target/wasm32-unknown-unknown/release/header_append_filter.wasm ./plugin.wasm
 
 .PHONY: clean
 clean:
-	rm extension.wasm || true
-	rm -r build || true
+	rm -f plugin.wasm
+	rm -rf build
 
 .PHONY: container
 container: clean build
 	mkdir build
 	cp container/manifest.yaml build/
-	cp extension.wasm build/
+	cp plugin.wasm build/
 	cd build && docker build -t ${HUB}/header-append-filter:${VERSION} . -f ../container/Dockerfile
 
 container.push: container
