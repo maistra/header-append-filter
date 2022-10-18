@@ -1,5 +1,6 @@
 VERSION = 2.3
 HUB ?= quay.io/maistra-dev
+CARGO_HOME =
 
 build: oidc.wasm
 
