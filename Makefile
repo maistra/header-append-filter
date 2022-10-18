@@ -1,5 +1,6 @@
-VERSION = 2.2
+VERSION = 2.3
 HUB ?= quay.io/maistra-dev
+CARGO_HOME =
 
 build: oidc.wasm
 
@@ -15,7 +16,6 @@ clean:
 .PHONY: container
 container: clean build
 	mkdir build
-	cp container/manifest.yaml build/
 	cp plugin.wasm build/
 	cd build && docker build -t ${HUB}/header-append-filter:${VERSION} . -f ../container/Dockerfile
 
