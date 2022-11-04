@@ -9,12 +9,16 @@ ROOTDIR=$(dirname "${SCRIPTPATH}")
 function download_envoy() {
   [ -n "${ENVOY_BINARY:-}" ] && return
 
+  ISTIO_REPO="${ISTIO_REPO:-maistra/istio}"
   ISTIO_BRANCH="${ISTIO_BRANCH:-$(git symbolic-ref --quiet --short HEAD)}"
-  PROXY_SHA=$(curl -sL "https://raw.githubusercontent.com/maistra/istio/${ISTIO_BRANCH}/istio.deps" | grep lastStableSHA | cut -f 4 -d '"')
-  ENVOY_BASE_URL=$(curl -sL "https://raw.githubusercontent.com/maistra/istio/${ISTIO_BRANCH}/Makefile.core.mk" | grep 'export ISTIO_ENVOY_BASE_URL' | awk '{print $4}')
-  ENVOY_URL="${ENVOY_BASE_URL}/envoy-alpha-${PROXY_SHA}.tar.gz"
+  PROXY_SHA=$(curl -sL "https://raw.githubusercontent.com/${ISTIO_REPO}/${ISTIO_BRANCH}/istio.deps" | grep lastStableSHA | cut -f 4 -d '"')
 
-  curl -sL "${ENVOY_URL}" | tar zx -C "${DIR}" --strip=4
+  # curl below gives us a string like ISTIO_ENVOY_BASE_URL="${ISTIO_ENVOY_BASE_URL:-https://storage.googleapis.com/istio-build/proxy}"
+  # eval() below should then define the variable ISTIO_ENVOY_BASE_URL, which is used below.
+  eval "$(curl -sL "https://raw.githubusercontent.com/${ISTIO_REPO}/${ISTIO_BRANCH}/bin/init.sh" | grep 'ISTIO_ENVOY_BASE_URL=')"
+  ENVOY_URL="${ISTIO_ENVOY_BASE_URL}/envoy-alpha-${PROXY_SHA}.tar.gz"
+
+  curl -sL "${ENVOY_URL}" | tar zx -C "${DIR}" --strip=3
   ENVOY_BINARY="${DIR}/envoy"
 }
 
@@ -35,8 +39,8 @@ function run_test() {
 }
 
 function finish() {
-  rm -rf "${DIR}"
   [ -n "${ENVOY_PID:-}" ] && kill "${ENVOY_PID}"
+  rm -rf "${DIR}"
 }
 
 function prepare() {
