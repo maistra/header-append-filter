@@ -1,4 +1,4 @@
-VERSION = 2.3
+VERSION = 2.4
 HUB ?= quay.io/maistra-dev
 CARGO_HOME =
 
