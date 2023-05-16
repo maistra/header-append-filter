@@ -9,8 +9,6 @@ ROOTDIR=$(dirname "${SCRIPTPATH}")
 function download_envoy() {
   [ -n "${ENVOY_BINARY:-}" ] && return
 
-  ISTIO_REPO="${ISTIO_REPO:-maistra/istio}"
-  ISTIO_BRANCH="${ISTIO_BRANCH:-$(git symbolic-ref --quiet --short HEAD)}"
   PROXY_SHA=$(curl -sL "https://raw.githubusercontent.com/${ISTIO_REPO}/${ISTIO_BRANCH}/istio.deps" | grep lastStableSHA | cut -f 4 -d '"')
 
   # curl below gives us a string like ISTIO_ENVOY_BASE_URL="${ISTIO_ENVOY_BASE_URL:-https://storage.googleapis.com/istio-build/proxy}"
